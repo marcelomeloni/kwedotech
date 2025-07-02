@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kwedo - Soluções Tecnológicas</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'kwedo-black': '#0a0a0a',
+                        'kwedo-gray': '#1a1a1a',
+                        'kwedo-light': '#f0f0f0',
+                        'kwedo-accent': '#22c55e',
+                        'sunaryum-orange': '#ff6a00',
+                        'sunaryum-dark': '#cc5500',
+                        'sunaryum-light': '#ff8c33'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif']
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'float': 'float 6s ease-in-out infinite',
+                        'logo-pulse': 'logoPulse 8s ease-in-out infinite'
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        },
+                        logoPulse: {
+                            '0%, 100%': { 
+                                transform: 'scale(1)',
+                                opacity: 1
+                            },
+                            '50%': { 
+                                transform: 'scale(1.05)',
+                                opacity: 0.9
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        * {
+            scroll-behavior: smooth;
+        }
+        body {
+            overflow-x: hidden;
+            background-color: #0a0a0a;
+        }
+        .hero-pattern {
+            background: 
+                radial-gradient(circle at 10% 20%, rgba(34, 197, 94, 0.05) 0%, rgba(0,0,0,0) 20%),
+                radial-gradient(circle at 90% 80%, rgba(34, 197, 94, 0.05) 0%, rgba(0,0,0,0) 20%);
+        }
+        .project-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .project-card:hover {
+            transform: translateY(-5px);
+        }
+        .feature-icon {
+            transition: transform 0.3s ease;
+        }
+        .feature-item:hover .feature-icon {
+            transform: scale(1.1) rotate(5deg);
+        }
+        .glow {
+            box-shadow: 0 0 15px rgba(34, 197, 94, 0.3);
+        }
+        .gradient-border {
+            position: relative;
+            border-radius: 0.5rem;
+            background: linear-gradient(#0a0a0a, #0a0a0a) padding-box,
+                        linear-gradient(45deg, rgba(255,255,255,0.1), rgba(34,197,94,0.2), rgba(255,255,255,0.1)) border-box;
+            border: 1px solid transparent;
+        }
+        .sunaryum-gradient {
+            background: linear-gradient(45deg, #ff6a00, #ff8c33);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .form-success {
+            display: none;
+            background: rgba(34, 197, 94, 0.1);
+            border: 1px solid #22c55e;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 15px;
+        }
+        .mobile-nav {
+            transform: translateX(100%);
+            transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+        .mobile-nav.active {
+            transform: translateX(0);
+        }
+        .nav-link {
+            position: relative;
+            padding-bottom: 4px;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #22c55e;
+            transition: width 0.3s ease;
+        }
+        .nav-link:hover::after,
+        .nav-link.active::after {
+            width: 100%;
+        }
+        .feature-card {
+            transition: all 0.3s ease;
+        }
+        .feature-card:hover {
+            background: rgba(34, 197, 94, 0.05);
+            transform: translateY(-5px);
+        }
+        .tech-badge {
+            transition: all 0.3s ease;
+        }
+        .tech-badge:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .btn-primary {
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 100%;
+            background: rgba(255,255,255,0.1);
+            transition: width 0.5s ease;
+            z-index: -1;
+        }
+        .btn-primary:hover::before {
+            width: 100%;
+        }
+        .hero-text span {
+            display: inline-block;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeUp 0.8s forwards;
+        }
+        .hero-text span:nth-child(1) { animation-delay: 0.1s; }
+        .hero-text span:nth-child(2) { animation-delay: 0.2s; }
+        .hero-text span:nth-child(3) { animation-delay: 0.3s; }
+        .hero-text span:nth-child(4) { animation-delay: 0.4s; }
+        
+        @keyframes fadeUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .logo-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .logo-main {
+            height: 60px;
+            transition: all 0.3s ease;
+            animation: logoPulse 8s ease-in-out infinite;
+        }
+        
+        .logo-hero {
+            height: 80px;
+        }
+        
+        .logo-footer {
+            height: 50px;
+        }
+        
+        @media (max-width: 768px) {
+            .logo-main {
+                height: 50px;
+            }
+            
+            .logo-hero {
+                height: 60px;
+            }
+            
+            .logo-footer {
+                height: 40px;
+            }
+        }
+        
+        /* CORREÇÃO PARA OS INPUTS */
+        .form-container {
+            position: relative;
+            z-index: 10;
+        }
+        
+        input, textarea {
+            background-color: #1a1a1a !important;
+            color: #f0f0f0 !important;
+            border: 1px solid #333;
+            border-radius: 0.375rem;
+            padding: 0.75rem 1rem;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+        
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: #22c55e;
+            box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.2);
+        }
+        
+        /* Efeito de foco aprimorado */
+        .input-container {
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+        
+        .input-container label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #f0f0f0;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body class="bg-kwedo-black text-kwedo-light font-sans">
+    <!-- Header -->
+    <header class="fixed w-full z-50 bg-kwedo-black/90 backdrop-blur-sm border-b border-gray-800">
+        <div class="container mx-auto px-4 py-3 sm:py-4 flex justify-between items-center">
+            <div class="flex items-center">
+                <div class="logo-container">
+                    <!-- Logo Kwedo com altura otimizada -->
+                    <img src="logo.png" alt="Kwedo Logo" class="logo-main">
+                </div>
+            </div>
+            
+            <nav class="hidden md:flex space-x-8">
+                <a href="#servicos" class="nav-link hover:text-kwedo-accent transition">Serviços</a>
+                <a href="#projetos" class="nav-link hover:text-kwedo-accent transition">Projetos</a>
+                <a href="#contato" class="nav-link hover:text-kwedo-accent transition">Contato</a>
+            </nav>
+            
+            <button id="mobile-menu-button" class="md:hidden text-xl p-2 rounded-lg hover:bg-gray-800 transition">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- Mobile Navigation -->
+    <div id="mobile-nav" class="mobile-nav fixed inset-0 bg-kwedo-black z-40 pt-20">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-center mb-8">
+                <img src="logo.png" alt="Kwedo Logo" class="h-16">
+            </div>
+            
+            <nav class="flex flex-col space-y-6 py-8">
+                <a href="#servicos" class="nav-link text-2xl py-3 hover:text-kwedo-accent transition flex items-center">
+                    <i class="fas fa-code mr-4 text-kwedo-accent"></i>
+                    Serviços
+                </a>
+                <a href="#projetos" class="nav-link text-2xl py-3 hover:text-kwedo-accent transition flex items-center">
+                    <i class="fas fa-project-diagram mr-4 text-kwedo-accent"></i>
+                    Projetos
+                </a>
+                <a href="#contato" class="nav-link text-2xl py-3 hover:text-kwedo-accent transition flex items-center">
+                    <i class="fas fa-envelope mr-4 text-kwedo-accent"></i>
+                    Contato
+                </a>
+            </nav>
+            
+            <div class="absolute top-4 right-4">
+                <button id="close-mobile-menu" class="text-2xl p-2 rounded-full hover:bg-gray-800 transition">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="min-h-screen flex items-center pt-32 pb-20 px-4">
+        <div class="container mx-auto flex flex-col md:flex-row items-center">
+            <div class="md:w-1/2 mb-12 md:mb-0">
+                <div class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-6 hero-text">
+                    <div class="mb-3"><span>SOLUÇÕES</span></div>
+                    <div class="text-kwedo-accent"><span>TECNOLÓGICAS</span></div>
+                    <div class="mt-3"><span>PARA O FUTURO</span></div>
+                </div>
+                
+                <p class="text-lg sm:text-xl text-gray-300 mb-8 max-w-lg leading-relaxed">
+                    Transformamos ideias em realidade digital. Desenvolvemos sistemas, automações e sites que impulsionam seu negócio para o próximo nível.
+                </p>
+                
+                <div class="flex flex-col sm:flex-row gap-4">
+                    <a href="#contato" class="btn-primary px-8 py-3 bg-kwedo-accent text-kwedo-black font-bold rounded-lg hover:bg-white transition duration-300 text-center">
+                        Fale Conosco
+                    </a>
+                    <a href="#projetos" class="btn-primary px-8 py-3 border border-kwedo-accent text-kwedo-accent font-bold rounded-lg hover:bg-kwedo-accent hover:text-kwedo-black transition duration-300 text-center">
+                        Ver Projetos
+                    </a>
+                </div>
+            </div>
+            
+            <div class="md:w-1/2 flex justify-center animate-float">
+                <div class="relative">
+                    <div class="absolute -inset-4 bg-kwedo-accent rounded-xl blur opacity-20 animate-pulse"></div>
+                    <div class="relative bg-kwedo-gray rounded-xl p-6 sm:p-8 max-w-md gradient-border">
+                        <div class="flex justify-center mb-6">
+                            <div class="bg-kwedo-accent w-16 h-16 sm:w-20 sm:h-20 rounded-lg flex items-center justify-center animate-pulse-slow">
+                                <!-- Símbolo K estilizado no card -->
+                                <img src="k.png" alt="Kwedo K" class="logo-hero">
+                            </div>
+                        </div>
+                        <h3 class="text-xl sm:text-2xl font-bold text-center mb-4">Inovação em Ação</h3>
+                        <p class="text-gray-300 text-center text-sm sm:text-base">
+                            Nossas soluções combinam tecnologia de ponta com design intuitivo para criar experiências digitais excepcionais.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Serviços -->
+    <section id="servicos" class="py-16 sm:py-20 bg-kwedo-gray">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12 sm:mb-16">
+                <h2 class="text-3xl sm:text-4xl font-bold mb-4">Nossos Serviços</h2>
+                <div class="w-20 h-1 bg-kwedo-accent mx-auto mb-6"></div>
+                <p class="text-gray-400 max-w-2xl mx-auto">
+                    Oferecemos soluções completas em tecnologia para impulsionar seu negócio
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
+                <div class="feature-card bg-kwedo-black p-6 sm:p-8 rounded-xl gradient-border">
+                    <div class="feature-icon bg-kwedo-accent w-14 h-14 sm:w-16 sm:h-16 rounded-lg flex items-center justify-center mb-6">
+                        <i class="fas fa-code text-xl sm:text-2xl text-kwedo-black"></i>
+                    </div>
+                    <h3 class="text-xl sm:text-2xl font-bold mb-4">Sistemas Web Personalizados</h3>
+                    <p class="text-gray-300 text-sm sm:text-base">
+                        Desenvolvemos sistemas sob medida para atender às necessidades específicas do seu negócio, com interfaces intuitivas e funcionalidades poderosas.
+                    </p>
+                </div>
+                
+                <div class="feature-card bg-kwedo-black p-6 sm:p-8 rounded-xl gradient-border">
+                    <div class="feature-icon bg-kwedo-accent w-14 h-14 sm:w-16 sm:h-16 rounded-lg flex items-center justify-center mb-6">
+                        <i class="fas fa-robot text-xl sm:text-2xl text-kwedo-black"></i>
+                    </div>
+                    <h3 class="text-xl sm:text-2xl font-bold mb-4">Automações Inteligentes</h3>
+                    <p class="text-gray-300 text-sm sm:text-base">
+                        Otimizamos processos complexos através de automações que aumentam a eficiência e reduzem custos operacionais.
+                    </p>
+                </div>
+                
+                <div class="feature-card bg-kwedo-black p-6 sm:p-8 rounded-xl gradient-border">
+                    <div class="feature-icon bg-kwedo-accent w-14 h-14 sm:w-16 sm:h-16 rounded-lg flex items-center justify-center mb-6">
+                        <i class="fas fa-globe text-xl sm:text-2xl text-kwedo-black"></i>
+                    </div>
+                    <h3 class="text-xl sm:text-2xl font-bold mb-4">Desenvolvimento de Sites</h3>
+                    <p class="text-gray-300 text-sm sm:text-base">
+                        Criamos websites modernos, responsivos e de alto desempenho que convertem visitantes em clientes.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projetos -->
+    <section id="projetos" class="py-16 sm:py-20">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12 sm:mb-16">
+                <h2 class="text-3xl sm:text-4xl font-bold mb-4">Projetos em Destaque</h2>
+                <div class="w-20 h-1 bg-kwedo-accent mx-auto mb-6"></div>
+                <p class="text-gray-400 max-w-2xl mx-auto">
+                    Soluções inovadoras que transformam negócios
+                </p>
+            </div>
+            
+            <!-- Projeto 1: Sistema de Corretagem -->
+            <div class="project-card mb-16 sm:mb-20 bg-kwedo-gray rounded-2xl overflow-hidden">
+                <div class="flex flex-col lg:flex-row">
+                    <div class="lg:w-1/2 p-6 sm:p-10">
+                        <div class="flex items-center mb-6">
+                            <div class="bg-kwedo-accent w-10 h-10 sm:w-12 sm:h-12 rounded-lg flex items-center justify-center mr-4">
+                                <i class="fas fa-coffee text-lg sm:text-xl text-kwedo-black"></i>
+                            </div>
+                            <h3 class="text-2xl sm:text-3xl font-bold">Sistema de Corretagem de Café</h3>
+                        </div>
+                        
+                        <p class="text-gray-300 mb-6 text-sm sm:text-base">
+                            Plataforma completa para gestão de clientes e negociações no mercado de café, desenvolvida para otimizar processos e aumentar a produtividade.
+                        </p>
+                        
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
+                            <div class="flex items-center">
+                                <i class="fas fa-check-circle text-kwedo-accent mr-2"></i>
+                                <span class="text-sm sm:text-base">Cadastro e gestão de clientes</span>
+                            </div>
+                            <div class="flex items-center">
+                                <i class="fas fa-check-circle text-kwedo-accent mr-2"></i>
+                                <span class="text-sm sm:text-base">Busca avançada de perfis</span>
+                            </div>
+                            <div class="flex items-center">
+                                <i class="fas fa-check-circle text-kwedo-accent mr-2"></i>
+                                <span class="text-sm sm:text-base">Mediação de negócios</span>
+                            </div>
+                            <div class="flex items-center">
+                                <i class="fas fa-check-circle text-kwedo-accent mr-2"></i>
+                                <span class="text-sm sm:text-base">Geração de contratos automática</span>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-6">
+                            <h4 class="text-lg sm:text-xl font-bold mb-3">Tecnologias Utilizadas</h4>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="tech-badge bg-kwedo-black px-3 py-1 rounded-full text-xs sm:text-sm">Tailwind CSS</span>
+                                <span class="tech-badge bg-kwedo-black px-3 py-1 rounded-full text-xs sm:text-sm">JavaScript</span>
+                                <span class="tech-badge bg-kwedo-black px-3 py-1 rounded-full text-xs sm:text-sm">Supabase DB</span>
+                                <span class="tech-badge bg-kwedo-black px-3 py-1 rounded-full text-xs sm:text-sm">DOCX Generation</span>
+                            </div>
+                        </div>
+                        <div class="mt-6 sm:mt-8 flex flex-wrap gap-3">
+                            <a href="https://rscsistema.onrender.com/" target="_blank"
+                               class="btn-primary px-6 py-3 bg-gradient-to-r from-[#39ff14] to-[#b6ff00] text-black font-bold rounded-lg 
+                                      hover:from-[#76ff03] hover:to-[#aeea00] 
+                                      transition 
+                                      shadow-[0_0_10px_#39ff1460,0_0_20px_#39ff1480] 
+                                      hover:shadow-[0_0_20px_#39ff14aa,0_0_30px_#b6ff00cc] 
+                                      duration-300 text-center w-full sm:w-auto">
+                                Visitar Site
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <div class="lg:w-1/2 flex items-center justify-center p-6 sm:p-10 bg-kwedo-black">
+                        <div class="relative w-full max-w-md">
+                            <div class="absolute -inset-4 bg-kwedo-accent rounded-xl blur opacity-20"></div>
+                            <div class="relative bg-gradient-to-br from-gray-800 to-kwedo-black rounded-xl overflow-hidden shadow-2xl w-full">
+                                <div class="bg-gray-900 h-8 flex items-center px-4">
+                                    <div class="flex space-x-2">
+                                        <div class="w-3 h-3 bg-red-500 rounded-full"></div>
+                                        <div class="w-3 h-3 bg-yellow-500 rounded-full"></div>
+                                        <div class="w-3 h-3 bg-green-500 rounded-full"></div>
+                                    </div>
+                                </div>
+                                <div class="p-4 sm:p-6">
+                                    <div class="flex justify-between items-center mb-4 sm:mb-6">
+                                        <h4 class="font-bold text-lg sm:text-xl">Dashboard de Clientes</h4>
+                                        <div class="bg-kwedo-accent text-kwedo-black px-3 py-1 rounded-full text-xs sm:text-sm font-bold">24 clientes</div>
+                                    </div>
+                                    
+                                    <div class="bg-kwedo-gray rounded-lg p-3 sm:p-4 mb-3 sm:mb-4">
+                                        <div class="flex justify-between mb-1 sm:mb-2">
+                                            <span class="text-sm sm:text-base">Fazenda Santa Maria</span>
+                                            <span class="text-kwedo-accent text-sm sm:text-base">Produtor</span>
+                                        </div>
+                                        <div class="text-xs sm:text-sm text-gray-400">Contato: (35) 98765-4321</div>
+                                    </div>
+                                    
+                                    <div class="bg-kwedo-gray rounded-lg p-3 sm:p-4 mb-3 sm:mb-4">
+                                        <div class="flex justify-between mb-1 sm:mb-2">
+                                            <span class="text-sm sm:text-base">Café do Brasil Export</span>
+                                            <span class="text-kwedo-accent text-sm sm:text-base">Comprador</span>
+                                        </div>
+                                        <div class="text-xs sm:text-sm text-gray-400">Contato: (11) 91234-5678</div>
+                                    </div>
+                                    
+                                    <div class="flex justify-center mt-4 sm:mt-6">
+                                        <button class="px-4 py-2 bg-kwedo-accent text-kwedo-black font-bold rounded-lg flex items-center text-sm sm:text-base">
+                                            <i class="fas fa-plus mr-2"></i> Novo Cliente
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Projeto 2: Sunaryum Platform -->
+            <div class="project-card bg-kwedo-gray rounded-2xl overflow-hidden">
+                <div class="flex flex-col lg:flex-row">
+                    <!-- Card Visual - Lado Esquerdo -->
+                    <div class="lg:w-1/2 flex items-center justify-center p-6 sm:p-10 bg-kwedo-black">
+                        <div class="relative w-full max-w-md">
+                            <!-- Mockup do site Sunaryum -->
+                            <div class="relative rounded-xl overflow-hidden shadow-2xl border border-[#ff6a00]/30">
+                                <div class="bg-gray-900 h-8 flex items-center px-4 border-b border-[#ff6a00]/20">
+                                    <div class="flex space-x-2">
+                                        <div class="w-3 h-3 bg-red-500 rounded-full"></div>
+                                        <div class="w-3 h-3 bg-yellow-500 rounded-full"></div>
+                                        <div class="w-3 h-3 bg-green-500 rounded-full"></div>
+                                    </div>
+                                    <div class="ml-4 text-xs text-gray-400">https://www.sunaryum.xyz</div>
+                                </div>
+                                
+                                <div class="p-4 bg-gradient-to-b from-gray-800 to-kwedo-black">
+                                    <!-- Cabeçalho -->
+                                    <div class="flex items-center justify-between mb-4 sm:mb-6">
+                                        <div class="flex items-center">
+                                            <div class="w-8 h-8 rounded-lg flex items-center justify-center mr-3">
+                                                <!-- Logo Sunaryum aumentada -->
+                                                <svg width="30" height="30" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                                                    <circle cx="50" cy="50" r="40" fill="#ff6a00"/>
+                                                    <circle cx="50" cy="50" r="25" fill="#ff8c33"/>
+                                                    <path d="M50 20 L70 50 L50 80 L30 50 Z" fill="#0a0a0a"/>
+                                                </svg>
+                                            </div>
+                                            <span class="font-bold text-[#ff8c33] text-lg">SUNARYUM</span>
+                                        </div>
+                                        <div class="flex space-x-2">
+                                            <button class="px-2 py-1 text-xs bg-[#ff6a00] rounded hover:bg-[#ff8c33] transition">Connect Wallet</button>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Dashboard -->
+                                    <div class="mb-3 sm:mb-4">
+                                        <div class="flex justify-between items-center mb-1 sm:mb-2">
+                                            <h3 class="font-bold text-[#ff8c33] text-sm sm:text-base">Daily Check-in</h3>
+                                            <span class="text-xs bg-[#ff6a00] px-2 py-1 rounded">+15 SUN</span>
+                                        </div>
+                                        <div class="bg-gray-700 rounded-lg p-3">
+                                            <div class="flex justify-between mb-1 sm:mb-2 text-xs sm:text-sm">
+                                                <span>Status:</span>
+                                                <span class="text-green-400">Completed</span>
+                                            </div>
+                                            <div class="w-full bg-gray-800 rounded-full h-2 mb-1 sm:mb-2">
+                                                <div class="bg-[#ff6a00] h-2 rounded-full" style="width: 100%"></div>
+                                            </div>
+                                            <div class="text-xs text-gray-400 text-center">Checked Today!</div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Seção de carteira -->
+                                    <div class="bg-gray-700 rounded-lg p-3 mb-3 sm:mb-4">
+                                        <div class="flex justify-between items-center mb-1 sm:mb-2">
+                                            <h3 class="font-bold text-sm sm:text-base">Wallet</h3>
+                                            <span class="text-xs text-[#ff8c33]">BIP-39</span>
+                                        </div>
+                                        <div class="flex justify-between items-center">
+                                            <div>
+                                                <div class="text-xs sm:text-sm">Balance</div>
+                                                <div class="text-[#ff8c33] font-bold text-sm sm:text-base">1,245.67 SUN</div>
+                                            </div>
+                                            <button class="px-3 py-1 text-xs bg-[#ff6a00] rounded hover:bg-[#ff8c33] transition">Send</button>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Links rápidos -->
+                                    <div class="grid grid-cols-3 gap-2">
+                                        <a target="_blank" href="https://sunaryum.xyz/whitepaper/br/" class="bg-gray-700 rounded p-2 text-center hover:bg-[#ff6a00] transition">
+                                            <i class="fas fa-file-alt text-[#ff8c33]"></i>
+                                            <div class="text-xs mt-1">Whitepaper</div>
+                                        </a>
+                                        <a target="_blank" href="https://sunaryum.xyz/home" class="bg-gray-700 rounded p-2 text-center hover:bg-[#ff6a00] transition">
+                                            <i class="fas fa-tachometer-alt text-[#ff8c33]"></i>
+                                            <div class="text-xs mt-1">Dashboard</div>
+                                        </a>
+                                        <a target="_blank" href="https://addons.mozilla.org/en-GB/firefox/addon/sunaryum-wallet/" class="bg-gray-700 rounded p-2 text-center hover:bg-[#ff6a00] transition">
+                                            <i class="fas fa-wallet text-[#ff8c33]"></i>
+                                            <div class="text-xs mt-1">Wallet</div>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Badges de tecnologia -->
+                            <div class="flex justify-center mt-4 sm:mt-6 flex-wrap gap-2">
+                                <span class="px-3 py-1 bg-kwedo-black text-xs rounded-full border border-[#ff6a00]/30">Tailwind CSS</span>
+                                <span class="px-3 py-1 bg-kwedo-black text-xs rounded-full border border-[#ff6a00]/30">Responsive Design</span>
+                                <span class="px-3 py-1 bg-kwedo-black text-xs rounded-full border border-[#ff6a00]/30">Web3 Integration</span>
+                                <span class="px-3 py-1 bg-kwedo-black text-xs rounded-full border border-[#ff6a00]/30">UX/UI Design</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Descrição do Desenvolvimento - Lado Direito -->
+                    <div class="lg:w-1/2 p-6 sm:p-10">
+                        <div class="flex items-center mb-6">
+                            <div class="bg-gradient-to-r from-[#ff6a00] to-[#ff8c33] w-10 h-10 sm:w-12 sm:h-12 rounded-lg flex items-center justify-center mr-4">
+                                <i class="fas fa-code text-xl text-white"></i>
+                            </div>
+                            <h3 class="text-2xl sm:text-3xl font-bold text-[#ff8c33]">Plataforma Sunaryum</h3>
+                        </div>
+                        
+                        <p class="text-gray-300 mb-6 text-sm sm:text-base">
+                            Desenvolvimento completo da plataforma web para o projeto Sunaryum, incluindo landing page responsiva,
+                            sistema de carteira digital e dashboard interativo.
+                        </p>
+                        
+                        <div class="grid grid-cols-1 gap-4 mb-6 sm:mb-8">
+                            <div class="flex items-start">
+                                <i class="fas fa-mobile-alt text-[#ff6a00] mt-1 mr-2"></i>
+                                <div>
+                                    <h4 class="font-bold text-[#ff8c33] text-sm sm:text-base">Design Responsivo</h4>
+                                    <p class="text-xs sm:text-sm text-gray-400">Layout adaptável para todos os dispositivos com Tailwind CSS</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start">
+                                <i class="fas fa-link text-[#ff6a00] mt-1 mr-2"></i>
+                                <div>
+                                    <h4 class="font-bold text-[#ff8c33] text-sm sm:text-base">Anchor Links</h4>
+                                    <p class="text-xs sm:text-sm text-gray-400">Navegação suave entre seções da landing page</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start">
+                                <i class="fab fa-chrome text-[#ff6a00] mt-1 mr-2"></i>
+                                <div>
+                                    <h4 class="font-bold text-[#ff8c33] text-sm sm:text-base">Extensão Wallet</h4>
+                                    <p class="text-xs sm:text-sm text-gray-400">Conexão com extensão de carteira web3</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start">
+                                <i class="fas fa-database text-[#ff6a00] mt-1 mr-2"></i>
+                                <div>
+                                    <h4 class="font-bold text-[#ff8c33] text-sm sm:text-base">Backend Integration</h4>
+                                    <p class="text-xs sm:text-sm text-gray-400">Conexão com banco de dados para armazenamento de dados de usuários</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-6 sm:mt-8 flex flex-wrap gap-3">
+                            <a href="https://www.sunaryum.xyz" target="_blank" class="btn-primary px-6 py-3 bg-gradient-to-r from-[#ff6a00] to-[#ff8c33] text-white font-bold rounded-lg hover:from-[#ff8c33] hover:to-[#ff6a00] transition shadow-[0_0_10px_#ff6a0030] text-center w-full sm:w-auto">
+                                <i class="fas fa-external-link-alt mr-2"></i> Visitar Site
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contato -->
+    <section id="contato" class="py-16 sm:py-20 bg-kwedo-gray">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto">
+                <div class="text-center mb-12 sm:mb-16">
+                    <h2 class="text-3xl sm:text-4xl font-bold mb-4">Entre em Contato</h2>
+                    <div class="w-20 h-1 bg-kwedo-accent mx-auto mb-6"></div>
+                    <p class="text-gray-400">
+                        Estamos prontos para transformar sua ideia em realidade
+                    </p>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-12">
+                    <div>
+                        <h3 class="text-xl sm:text-2xl font-bold mb-6">Informações de Contato</h3>
+                        
+                        <div class="space-y-6">
+                            <div class="flex items-start">
+                                <div class="bg-kwedo-accent w-10 h-10 sm:w-12 sm:h-12 rounded-lg flex items-center justify-center mr-4">
+                                    <i class="fas fa-envelope text-lg sm:text-xl text-kwedo-black"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-base sm:text-lg">Email</h4>
+                                    <a href="mailto:kwedosolucoes@gmail.com" class="text-gray-300 hover:text-kwedo-accent transition text-sm sm:text-base">kwedosolucoes@gmail.com</a>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start">
+                                <div class="bg-kwedo-accent w-10 h-10 sm:w-12 sm:h-12 rounded-lg flex items-center justify-center mr-4">
+                                    <i class="fas fa-phone-alt text-lg sm:text-xl text-kwedo-black"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-base sm:text-lg">Telefone</h4>
+                                    <a href="tel:+553597607442" class="text-gray-300 hover:text-kwedo-accent transition text-sm sm:text-base">(35) 97607-4442</a>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start">
+                                <div class="bg-kwedo-accent w-10 h-10 sm:w-12 sm:h-12 rounded-lg flex items-center justify-center mr-4">
+                                    <i class="fas fa-map-marker-alt text-lg sm:text-xl text-kwedo-black"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-base sm:text-lg">Localização</h4>
+                                    <p class="text-gray-300 text-sm sm:text-base">Brasil - Atendimento Global</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-8 sm:mt-10">
+                            <h4 class="text-lg sm:text-xl font-bold mb-4">Siga a Kwedo</h4>
+                            <div class="flex space-x-4">
+                                <a target="_blank" href="https://www.linkedin.com/company/kwedo/" class="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-kwedo-black flex items-center justify-center hover:bg-kwedo-accent transition">
+                                    <i class="fab fa-linkedin-in text-lg sm:text-xl"></i>
+                                </a>
+                                
+                                <a target="_blank" href="https://www.instagram.com/kwedotech/" class="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-kwedo-black flex items-center justify-center hover:bg-kwedo-accent transition">
+                                    <i class="fab fa-instagram text-lg sm:text-xl"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="gradient-border p-6 sm:p-8 rounded-xl form-container">
+                        <h3 class="text-xl sm:text-2xl font-bold mb-6">Envie uma mensagem</h3>
+                        <form id="contact-form" action="https://formspree.io/f/xanjkekj" method="POST" class="space-y-5">
+                            <!-- Formsubmit hidden inputs -->
+                            <input type="hidden" name="_captcha" value="false">
+                            <input type="hidden" name="_next" value="">
+                        
+                            <div>
+                              <label for="name" class="block text-gray-300 mb-1 font-medium">Nome</label>
+                              <input
+                                type="text"
+                                id="name"
+                                name="name"
+                                required
+                                class="w-full px-4 py-3 rounded-lg bg-gray-800 border border-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-green-400 transition"
+                                placeholder="Seu nome"
+                              >
+                            </div>
+                        
+                            <div>
+                              <label for="email" class="block text-gray-300 mb-1 font-medium">Email</label>
+                              <input
+                                type="email"
+                                id="email"
+                                name="email"
+                                required
+                                class="w-full px-4 py-3 rounded-lg bg-gray-800 border border-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-green-400 transition"
+                                placeholder="seu@email.com"
+                              >
+                            </div>
+                        
+                            <div>
+                              <label for="message" class="block text-gray-300 mb-1 font-medium">Mensagem</label>
+                              <textarea
+                                id="message"
+                                name="message"
+                                rows="5"
+                                required
+                                class="w-full px-4 py-3 rounded-lg bg-gray-800 border border-gray-700 text-white resize-none focus:outline-none focus:ring-2 focus:ring-green-400 transition"
+                                placeholder="Escreva sua mensagem aqui..."
+                              ></textarea>
+                            </div>
+                        
+                            <button
+                              type="submit"
+                              class="w-full py-3 font-bold rounded-lg bg-green-500 text-black hover:bg-green-600 transition"
+                            >
+                              Enviar Mensagem
+                            </button>
+                        
+                            <!-- Mensagem de sucesso -->
+                            <div
+                              id="form-success"
+                              class="hidden mt-4 flex items-center text-green-400 font-semibold space-x-2"
+                              role="alert"
+                            >
+                              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                              </svg>
+                              <span>Sua mensagem foi enviada com sucesso! Entraremos em contato em breve.</span>
+                            </div>
+                        
+                            <!-- Mensagem de erro -->
+                            <div
+                              id="form-error"
+                              class="hidden mt-4 flex items-center text-green-400 font-semibold space-x-2"
+                              role="alert"
+                            >
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                              </svg>
+                              <span>Sua mensagem foi enviada com sucesso! Entraremos em contato em breve.</span>
+                            </div>
+                          </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+   
+    <!-- Footer -->
+    <footer class="py-10 bg-kwedo-black border-t border-gray-800">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="flex items-center mb-6 md:mb-0">
+                    <div class="logo-container">
+                        <!-- Logo Kwedo no footer -->
+                        <img src="logo.png" alt="Kwedo Logo" class="logo-footer">
+                    </div>
+                </div>
+                
+                <div class="text-center text-gray-400 mb-6 md:mb-0">
+                    <p class="text-sm sm:text-base">Transformando ideias em soluções digitais</p>
+                    <p class="mt-2 text-xs sm:text-sm">© 2023 Kwedo Soluções Tecnológicas. Todos os direitos reservados.</p>
+                </div>
+                
+                <div>
+                    <a href="#contato" class="px-6 py-2 border border-kwedo-accent text-kwedo-accent rounded-lg hover:bg-kwedo-accent hover:text-kwedo-black transition text-sm sm:text-base">
+                        Contato
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js">
+     
+    </script>
+</body>
+</html>
